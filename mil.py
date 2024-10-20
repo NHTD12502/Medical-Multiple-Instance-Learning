@@ -132,6 +132,10 @@ def Define_Feature_Extractor(feature_extractor:str,
     
     num_chs = 256
     model_args = {}
+
+    ########
+    print("not pretrained")
+    #######
     
     if args.feature_extractor == 'resnet18.tv_in1k':
         """ feature_extractor = ResNet.ResNet(block=ResNet.BasicBlock, 
@@ -246,6 +250,9 @@ def Pretrained_Feature_Extractures(feature_extractor, args) -> str:
                    'Feature_Extractors/Pretrained_EViTs/evit-0.7-fuse-img224-deit-s.pth'
                    ]
     
+     ########
+    print("actuallty pretrained")
+    #######
     if feature_extractor == "resnet18.tv_in1k":
         return checkpoints[0]
     elif feature_extractor == "resnet50.tv_in1k":
@@ -626,7 +633,7 @@ class MIL(nn.Module):
             torch.Tensor: Returns the features with shape (Batch_size, N, embedding_size).
         """
         x = self.patch_extractor(x) # (1) Extract features from the Images: (Batch_size, 3, 224, 224) -> (Batch_size, embedding_size, 14, 14)
-
+        print("size of x_foward_features_cnns= ", x.size())
         # Register Hook to have access to the gradients
         if not self.is_training:
             if x.requires_grad == True:
@@ -727,16 +734,22 @@ class InstanceMIL(MIL):
         
         # (1) Foward Features: (Batch_size, 3, 224, 224) -> (Batch_size, N, embedding_size)
         x = self.foward_features_cnns(x) if self.patch_extractor_model in cnns_backbones else self.foward_features_vits(x)
+        print("size of x_1= ", x.size())
         x = x.reshape(-1, x.size(2)) # Transform input: (Batch_size*N, embedding_size)
+        print("size of x_2= ", x.size())
+        print("model name= ", self.patch_extractor_model)
 
         # (2) Use a deep classifier to obtain the score for each instance: (Batch_size*N, embedding_size) -> (Batch_size*N, num_classes)
         x = self.classifier(x) 
+        print("size of x_3= ", x.size())
         x = x.view(-1, self.num_patches, self.num_classes) # Transform x to: (Batch_size, N, num_classes)
+        print("size of x_4= ", x.size())
         
         self.save_patch_probs(torch.softmax(x, dim=2)) # Save the softmax probabilities of the patches (instances)
         
         # (3) Apply pooling to obtain the bag representation: (Batch_size, N, num_classes) -> (Batch_size, num_classes)
         x = self.MilPooling(x, mask)
+        print("size of x_bag= ", x.size())
         self.save_softmax_bag_probs(x) # Save the softmax probabilities of the bag
         
         # (4) Apply log to softmax values 

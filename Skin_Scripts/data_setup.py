@@ -41,7 +41,7 @@ class SkinCancerDataset(Dataset):
             
             for img_name in os.listdir(label_dir):
                 
-                if dataset == 'ISIC2019-Clean':
+                if dataset == 'ISIC2019-Clean'or dataset == 'ISIC2018':
                     img_idx = img_name[:12] 
                 elif dataset == 'PH2':
                     img_idx = img_name
@@ -137,7 +137,7 @@ def Build_Dataset(is_train, data_path, args):
         img_transform = Build_Transform(is_train, args)
     else:
         img_transform = transforms.Compose([   
-            #transforms.Resize(size=(224, 224)), # Input images are already 224x224
+            transforms.Resize(size=(224, 224)), # Input images are already 224x224
             transforms.ToTensor(),
             transforms.Normalize(mean=IMAGENET_DEFAULT_MEAN, std=IMAGENET_DEFAULT_STD)
         ])

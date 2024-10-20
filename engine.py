@@ -12,8 +12,8 @@ from sklearn.utils.class_weight import compute_class_weight
     
 import mil
 
-import breast_scripts.engine as breast_engine
-import skin_scripts.engine as skin_engine
+import Breast_Scripts.engine as breast_engine
+import Skin_Scripts.engine as skin_engine
 
 def train_step(model: torch.nn.Module, 
                dataloader: torch.utils.data.DataLoader, 

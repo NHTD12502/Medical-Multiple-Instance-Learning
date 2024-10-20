@@ -44,6 +44,8 @@ def train_step(model: torch.nn.Module,
 
         #with torch.cuda.amp.autocast():
         bag_prob = model(input, mask) # 2.Forward pass
+        print ("Bag Prob shape: ", bag_prob.shape)
+        print("Target shape: ", target.shape)
         loss = criterion(bag_prob, target) # 3. Compute and accumulate loss
         
         train_loss += loss.item() 

@@ -39,7 +39,7 @@ def get_args_parser():
     parser.add_argument('--output_dir', default='MIL-Output', help='path where to save, empty for no saving')
     parser.add_argument('--data_path', default='', help='path to input file')
     parser.add_argument('--seed', default=42, type=int, help='random seed')
-    parser.add_argument('--gpu', default='cuda:1', help='GPU id to use.')
+    parser.add_argument('--gpu', default='cuda:0', help='GPU id to use.')
     
     parser.add_argument('--train', action='store_true', default=False, help='Training mode.')
     parser.add_argument('--eval', action='store_true', default=False, help='Evaluation mode.')
@@ -259,6 +259,8 @@ def get_args_parser():
 
 def main(args):
     
+    wandb.login(key='efbe0957ea38ed9dcc11e38371dd8df73ce4d5f3')
+
     if not args.train and not args.eval and not args.finetune and not args.infer and not args.visualize and not args.roi_eval:
         raise ValueError('The mode is not specified. Please specify the mode: --train, --eval, --finetune, --infer, --visualize, --roi_eval.')
 
@@ -470,6 +472,8 @@ def main(args):
         for epoch in range(args.start_epoch, (args.epochs + args.cooldown_epochs)):
     
             engine.Classifier_Warmup(model, epoch, args.classifier_warmup_epochs, args)
+
+            print("model training", model.training, model ) 
 
             train_stats = engine.train_step(model=model,
                                             dataloader=data_loader_train,

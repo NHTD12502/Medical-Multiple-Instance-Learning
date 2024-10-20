@@ -1,7 +1,7 @@
-import breast_scripts.data_setup as breast_data_setup
-import skin_scripts.data_setup as skin_data_setup
+import Breast_Scripts.data_setup as breast_data_setup
+import Skin_Scripts.data_setup as skin_data_setup
 
-datasets=['ISIC2019-Clean', 'PH2', 'Derm7pt','DDSM+CBIS+MIAS_CLAHE-Binary-Mass_vs_Normal', 
+datasets=['ISIC2018','ISIC2019-Clean', 'PH2', 'Derm7pt','DDSM+CBIS+MIAS_CLAHE-Binary-Mass_vs_Normal', 
           'DDSM+CBIS+MIAS_CLAHE-Binary-Benign_vs_Malignant', 'DDSM+CBIS+MIAS_CLAHE', 'DDSM+CBIS+MIAS_CLAHE-v2', 'INbreast',
           'MIAS_CLAHE', 'MIAS_CLAHE-Mass_vs_Normal', 'MIAS_CLAHE-Benign_vs_Malignant',
           'DDSM', 'DDSM-Mass_vs_Normal', 'DDSM-Benign_vs_Malignant', 
